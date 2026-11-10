@@ -1,0 +1,22 @@
+{
+  "real_train_counts": {
+    "normal": 110,
+    "pothole": 24,
+    "crack": 24
+  },
+  "synthetic_added_counts": {
+    "normal": 0,
+    "pothole": 86,
+    "crack": 86
+  },
+  "augmented_train_counts": {
+    "normal": 110,
+    "pothole": 110,
+    "crack": 110
+  },
+  "real_test_counts": {
+    "normal": 45,
+    "pothole": 45,
+    "crack": 45
+  }
+}

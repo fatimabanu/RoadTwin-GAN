@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: roadtwin-gan-backend
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: >-
+      pip install --upgrade pip &&
+      pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision &&
+      pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.4
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: FLASK_ENV
+        value: production
