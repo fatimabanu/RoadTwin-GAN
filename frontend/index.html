@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RoadTwin-GAN | Road Surface Digital Twin Framework</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-logo">🛣️</div>
+        <div>
+          <h1 class="brand-title">RoadTwin-GAN</h1>
+          <p class="brand-subtitle">AI-Driven Road Surface Digital Twin & Quality Inspection</p>
+        </div>
+      </div>
+      
+      <!-- Backend Health Indicator -->
+      <div class="server-status" id="serverStatusBadge">
+        <span class="status-dot pulse" id="statusDot"></span>
+        <span class="status-label" id="statusLabel">Checking backend...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="main-content">
+    <div class="dashboard-grid">
+
+      <!-- Left Column: Image Upload & Preview -->
+      <section class="card upload-card">
+        <div class="card-header">
+          <h2 class="card-title">1. Upload Road Surface Image</h2>
+          <p class="card-description">Select or drag & drop a road inspection photograph (JPEG, PNG, WebP up to 16MB).</p>
+        </div>
+
+        <div class="drop-zone" id="dropZone">
+          <input type="file" id="fileInput" accept="image/png, image/jpeg, image/jpg, image/webp" hidden>
+          <div class="drop-zone-prompt" id="dropZonePrompt">
+            <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            <p class="prompt-main">Drag and drop road image here</p>
+            <p class="prompt-sub">or <button type="button" class="browse-link" id="browseBtn">browse files</button> from your device</p>
+          </div>
+
+          <!-- Image Preview Area -->
+          <div class="preview-container" id="previewContainer" style="display: none;">
+            <img id="imagePreview" alt="Road Surface Preview" class="image-preview">
+            <div class="preview-overlay">
+              <span id="previewFilename" class="preview-filename">road_image.jpg</span>
+              <span id="previewFilesize" class="preview-filesize">0 KB</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="button-group">
+          <button id="uploadBtn" class="btn btn-primary" disabled>
+            <span class="btn-text">Upload & Inspect</span>
+            <span class="spinner" id="btnSpinner" style="display: none;"></span>
+          </button>
+          <button id="resetBtn" class="btn btn-secondary" type="button">Reset</button>
+        </div>
+
+        <!-- User Feedback Alert -->
+        <div id="feedbackAlert" class="alert-box" style="display: none;">
+          <div class="alert-content">
+            <span id="alertIcon" class="alert-icon">ℹ️</span>
+            <span id="alertMessage" class="alert-message">Status message goes here.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Results & AI Integration Placeholders -->
+      <section class="card results-card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <h2 class="card-title">2. Analysis & Digital Twin Results</h2>
+            <span class="badge badge-warning">AI Integration Pending</span>
+          </div>
+          <p class="card-description">Inspection output from OpenCV validation and future PyTorch GAN pipeline.</p>
+        </div>
+
+        <!-- Pending Model Integration Banner -->
+        <div class="notice-box notice-warning">
+          <div class="notice-icon">⚠️</div>
+          <div class="notice-body">
+            <h4 class="notice-title">Model Status: Pending Integration</h4>
+            <p class="notice-text">
+              Real PyTorch GAN models (RoadTwin Generator & Defect Segmentation) will be integrated in the upcoming development milestone. 
+              <strong>No synthetic or fake AI predictions are shown below.</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- Image Metadata Card (Populated upon upload) -->
+        <div class="metadata-section" id="metadataSection" style="display: none;">
+          <h3 class="section-subtitle">Image Validation Metadata (OpenCV)</h3>
+          <div class="metadata-grid">
+            <div class="metadata-item">
+              <span class="meta-label">Width</span>
+              <span class="meta-value" id="metaWidth">--</span>
+            </div>
+            <div class="metadata-item">
+              <span class="meta-label">Height</span>
+              <span class="meta-value" id="metaHeight">--</span>
+            </div>
+            <div class="metadata-item">
+              <span class="meta-label">Channels</span>
+              <span class="meta-value" id="metaChannels">--</span>
+            </div>
+            <div class="metadata-item">
+              <span class="meta-label">Validated Size</span>
+              <span class="meta-value" id="metaSize">--</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Placeholder: Future GAN Surface Reconstruction -->
+        <div class="placeholder-section">
+          <h3 class="section-subtitle">Digital Twin Surface Generation (Future GAN Output)</h3>
+          <div class="placeholder-box">
+            <div class="placeholder-icon">🎨</div>
+            <p class="placeholder-title">RoadTwin-GAN Model Output Slot</p>
+            <p class="placeholder-desc">
+              When integrated, the GAN generator will synthesize high-resolution digital twin pavement representations and 3D surface elevation maps here.
+            </p>
+            <span class="code-pill">PyTorch Generator Architecture: Pending</span>
+          </div>
+        </div>
+
+        <!-- Placeholder: Future Defect Detection -->
+        <div class="placeholder-section">
+          <h3 class="section-subtitle">Defect Detection & Segmentation (Pending)</h3>
+          <div class="placeholder-box">
+            <div class="placeholder-icon">🔍</div>
+            <p class="placeholder-title">Pothole & Crack Segmentation Mask</p>
+            <p class="placeholder-desc">
+              Segmented visual overlays identifying pothole severity, crack propagation, and asphalt distress metrics will be displayed here.
+            </p>
+            <span class="code-pill">PyTorch Segmentation / Object Detection: Pending</span>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Application Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p>RoadTwin-GAN &bull; College Engineering Project</p>
+      <div class="tech-tags">
+        <span class="tag">HTML / CSS / JS</span>
+        <span class="tag">Python Flask</span>
+        <span class="tag">OpenCV</span>
+        <span class="tag">PyTorch (Planned)</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
