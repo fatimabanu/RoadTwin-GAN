@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RoadTwin-GAN | Road Surface Digital Twin Framework</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-logo">🛣️</div>
+        <div>
+          <h1 class="brand-title">RoadTwin-GAN</h1>
+          <p class="brand-subtitle">AI-Driven Road Surface Digital Twin & Quality Inspection</p>
+        </div>
+      </div>
+      
+      <!-- Backend Health Indicator -->
+      <div class="server-status" id="serverStatusBadge">
+        <span class="status-dot pulse" id="statusDot"></span>
+        <span class="status-label" id="statusLabel">Checking backend...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="main-content">
+    <div class="dashboard-grid">
+
+      <!-- Left Column: Image Upload & Preview Panel -->
+      <aside class="card upload-card">
+        <div class="card-header">
+          <div class="card-title-group">
+            <h2 class="card-title">1. Upload Road Surface Image</h2>
+            <span class="badge badge-accent">Input Panel</span>
+          </div>
+          <p class="card-description">Select or drag & drop a road inspection photograph (JPEG, PNG, WebP up to 16MB).</p>
+        </div>
+
+        <!-- Drag & Drop Zone -->
+        <div class="drop-zone" id="dropZone">
+          <input type="file" id="fileInput" accept="image/png, image/jpeg, image/jpg, image/webp" hidden>
+          <div class="drop-zone-prompt" id="dropZonePrompt">
+            <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            <p class="prompt-main">Drag and drop road image here</p>
+            <p class="prompt-sub">or <button type="button" class="browse-link" id="browseBtn">browse files</button> from your device</p>
+          </div>
+
+          <!-- Image Preview Area -->
+          <div class="preview-container" id="previewContainer" style="display: none;">
+            <img id="imagePreview" alt="Road Surface Preview" class="image-preview">
+            <div class="preview-overlay">
+              <span id="previewFilename" class="preview-filename">road_image.jpg</span>
+              <span id="previewFilesize" class="preview-filesize">0 KB</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="button-group">
+          <button id="uploadBtn" class="btn btn-primary" disabled>
+            <span class="btn-text">Upload & Inspect</span>
+            <span class="spinner" id="btnSpinner" style="display: none;"></span>
+          </button>
+          <button id="resetBtn" class="btn btn-secondary" type="button">Reset</button>
+        </div>
+
+        <!-- User Feedback Alert -->
+        <div id="feedbackAlert" class="alert-box" style="display: none;">
+          <div class="alert-content">
+            <span id="alertIcon" class="alert-icon">ℹ️</span>
+            <span id="alertMessage" class="alert-message">Status message goes here.</span>
+          </div>
+        </div>
+
+        <!-- Quick Pipeline Guide -->
+        <div class="pipeline-guide">
+          <h4 class="guide-title">Inspection Workflow</h4>
+          <ol class="guide-steps">
+            <li><span class="step-num">1</span> Upload raw pavement inspection capture.</li>
+            <li><span class="step-num">2</span> OpenCV decodes & verifies matrix integrity.</li>
+            <li><span class="step-num">3</span> Synthesize digital twin via GAN generator.</li>
+            <li><span class="step-num">4</span> Map distress severity & localize defects.</li>
+          </ol>
+        </div>
+      </aside>
+
+      <!-- Right Column: Results & AI Inspection Dashboard -->
+      <section class="card results-card">
+        
+        <!-- Dashboard Header -->
+        <div class="card-header">
+          <div class="card-title-group">
+            <div>
+              <h2 class="card-title">2. Analysis & Digital Twin Results</h2>
+              <p class="card-description">Comprehensive inspection dashboard: Digital twin reconstruction, damage detection overlay, defect quantification, and image metadata.</p>
+            </div>
+            <span class="badge badge-warning">AI Integration Pending</span>
+          </div>
+        </div>
+
+        <!-- Pending Model Integration Banner -->
+        <div class="notice-box notice-warning">
+          <div class="notice-icon">⚠️</div>
+          <div class="notice-body">
+            <h4 class="notice-title">Model Status: Pending Integration</h4>
+            <p class="notice-text">
+              Real PyTorch GAN models (RoadTwin Generator & Defect Segmentation) will be integrated in upcoming milestones. 
+              <strong>All metrics and visual slots below are authentic architectural placeholders — zero fake AI predictions are displayed.</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- Section A: Defect Detection Summary Cards -->
+        <div class="dashboard-section">
+          <div class="section-header-row">
+            <div class="title-with-pill">
+              <h3 class="section-heading">Defect Detection Summary</h3>
+              <span class="sub-pill">Object Detection & Segmentation</span>
+            </div>
+            <span class="badge badge-pending">Pending Integration</span>
+          </div>
+
+          <div class="summary-cards-grid">
+            
+            <!-- Summary Card 1: Pothole Count -->
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <span class="summary-card-label">Potholes Detected</span>
+                <span class="summary-card-icon pothole-icon">🕳️</span>
+              </div>
+              <div class="summary-card-body">
+                <span class="summary-card-value">--</span>
+                <span class="badge badge-pending">Pending Integration</span>
+              </div>
+              <p class="summary-card-subtext">Awaiting YOLO / Mask R-CNN detector</p>
+            </div>
+
+            <!-- Summary Card 2: Crack Count -->
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <span class="summary-card-label">Cracks Detected</span>
+                <span class="summary-card-icon crack-icon">⚡</span>
+              </div>
+              <div class="summary-card-body">
+                <span class="summary-card-value">--</span>
+                <span class="badge badge-pending">Pending Integration</span>
+              </div>
+              <p class="summary-card-subtext">Awaiting crack segmentation pipeline</p>
+            </div>
+
+            <!-- Summary Card 3: Total Detected Defects -->
+            <div class="summary-card total-card">
+              <div class="summary-card-header">
+                <span class="summary-card-label">Total Detected Defects</span>
+                <span class="summary-card-icon total-icon">🎯</span>
+              </div>
+              <div class="summary-card-body">
+                <span class="summary-card-value">--</span>
+                <span class="badge badge-pending">Pending Integration</span>
+              </div>
+              <p class="summary-card-subtext">Aggregated pavement distress count</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Section B: Comparison 1 - Original Road Image vs Synthetic GAN Image -->
+        <div class="dashboard-section">
+          <div class="section-header-row">
+            <div class="title-with-pill">
+              <h3 class="section-heading">Digital Twin Surface Generation (RoadTwin-GAN)</h3>
+              <span class="sub-pill">Generative Adversarial Network</span>
+            </div>
+            <span class="badge badge-pending">GAN Model Pending</span>
+          </div>
+          <p class="section-subtext">Side-by-side visual comparison between the raw inspection photograph and the synthetic pavement twin generated by the GAN architecture.</p>
+
+          <div class="comparison-grid">
+            
+            <!-- Comparison Pane: Original Image -->
+            <div class="comparison-pane">
+              <div class="comparison-pane-header">
+                <div class="pane-title-group">
+                  <span class="pane-indicator source-indicator"></span>
+                  <span class="comparison-pane-title">Original Road Surface</span>
+                </div>
+                <span class="pane-tag">Input Source</span>
+              </div>
+              <div class="comparison-viewport">
+                <div class="viewport-placeholder">
+                  <div class="placeholder-icon-circle">📷</div>
+                  <h5 class="placeholder-title">Original Inspection Photograph</h5>
+                  <p class="placeholder-desc">Source road surface baseline loaded from the upload panel.</p>
+                  <span class="viewport-status-pill">Baseline Sensor Capture</span>
+                </div>
+              </div>
+              <div class="comparison-pane-footer">
+                <span>Domain: Real Pavement</span>
+                <span>Ground Truth</span>
+              </div>
+            </div>
+
+            <!-- Comparison Pane: Synthetic GAN Image -->
+            <div class="comparison-pane comparison-pane-pending">
+              <div class="comparison-pane-header">
+                <div class="pane-title-group">
+                  <span class="pane-indicator gan-indicator"></span>
+                  <span class="comparison-pane-title">Synthetic GAN Twin</span>
+                </div>
+                <span class="badge badge-pending">Pending Integration</span>
+              </div>
+              <div class="comparison-viewport">
+                <div class="viewport-placeholder">
+                  <div class="placeholder-icon-circle gan-icon-circle">🎨</div>
+                  <h5 class="placeholder-title">RoadTwin-GAN Generated Twin</h5>
+                  <p class="placeholder-desc">Once trained weights are attached, the generator synthesizes high-fidelity digital twin asphalt representations and 3D surface elevation maps.</p>
+                  <span class="viewport-status-pill pending-pill">PyTorch Generator: Pending</span>
+                </div>
+              </div>
+              <div class="comparison-pane-footer">
+                <span>Domain: Synthetic Twin</span>
+                <span>Latent Dimension: 512-D</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Section C: Comparison 2 - Original Road Image vs Damage Detection Overlay -->
+        <div class="dashboard-section">
+          <div class="section-header-row">
+            <div class="title-with-pill">
+              <h3 class="section-heading">Damage Detection & Defect Segmentation Overlay</h3>
+              <span class="sub-pill">Computer Vision Overlay</span>
+            </div>
+            <span class="badge badge-pending">Segmentation Pending</span>
+          </div>
+          <p class="section-subtext">Side-by-side comparison illustrating pixel-level localization of road distress: potholes, structural fissures, and surface rutting.</p>
+
+          <div class="comparison-grid">
+            
+            <!-- Comparison Pane: Original Image Reference -->
+            <div class="comparison-pane">
+              <div class="comparison-pane-header">
+                <div class="pane-title-group">
+                  <span class="pane-indicator source-indicator"></span>
+                  <span class="comparison-pane-title">Original Road Surface</span>
+                </div>
+                <span class="pane-tag">Reference Frame</span>
+              </div>
+              <div class="comparison-viewport">
+                <div class="viewport-placeholder">
+                  <div class="placeholder-icon-circle">🛣️</div>
+                  <h5 class="placeholder-title">Reference Pavement Frame</h5>
+                  <p class="placeholder-desc">Reference road frame for spatial alignment and defect overlay mapping.</p>
+                  <span class="viewport-status-pill">Spatial Reference</span>
+                </div>
+              </div>
+              <div class="comparison-pane-footer">
+                <span>Channel Mode: RGB 3-Channel</span>
+                <span>Unsegmented</span>
+              </div>
+            </div>
+
+            <!-- Comparison Pane: Damage Detection Overlay -->
+            <div class="comparison-pane comparison-pane-pending">
+              <div class="comparison-pane-header">
+                <div class="pane-title-group">
+                  <span class="pane-indicator mask-indicator"></span>
+                  <span class="comparison-pane-title">Damage Detection Overlay</span>
+                </div>
+                <span class="badge badge-pending">Pending Integration</span>
+              </div>
+              <div class="comparison-viewport">
+                <div class="viewport-placeholder">
+                  <div class="placeholder-icon-circle mask-icon-circle">🔍</div>
+                  <h5 class="placeholder-title">Pothole & Crack Segmentation Mask</h5>
+                  <p class="placeholder-desc">Segmented visual overlay highlighting distress severity zones and boundary coordinates across the roadway.</p>
+                  
+                  <!-- Defect Color Legend -->
+                  <div class="defect-legend">
+                    <span class="legend-chip legend-pothole">
+                      <span class="legend-color-dot"></span> Pothole (Pending)
+                    </span>
+                    <span class="legend-chip legend-crack">
+                      <span class="legend-color-dot"></span> Crack (Pending)
+                    </span>
+                    <span class="legend-chip legend-rutting">
+                      <span class="legend-color-dot"></span> Rutting (Pending)
+                    </span>
+                  </div>
+
+                  <span class="viewport-status-pill pending-pill">Defect Segmentation: Pending</span>
+                </div>
+              </div>
+              <div class="comparison-pane-footer">
+                <span>Mask Resolution: Matched</span>
+                <span>Pixel Severity Class</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Section D: Image Inspection Metadata (OpenCV) -->
+        <div class="dashboard-section">
+          <div class="section-header-row">
+            <div class="title-with-pill">
+              <h3 class="section-heading">Image Inspection Metadata</h3>
+              <span class="sub-pill">OpenCV Validation Engine</span>
+            </div>
+            <span class="badge badge-info">cv2.imdecode</span>
+          </div>
+          <p class="section-subtext">Geometric, dimensionality, and binary integrity properties verified by OpenCV upon backend upload.</p>
+
+          <!-- Dynamic Metadata Container (Targeted by script.js) -->
+          <div class="metadata-section" id="metadataSection">
+            <div class="metadata-grid">
+              
+              <div class="metadata-item">
+                <div class="meta-item-header">
+                  <span class="meta-label">Width</span>
+                  <span class="meta-icon">↔️</span>
+                </div>
+                <span class="meta-value" id="metaWidth">--</span>
+                <span class="meta-sub">Pixel resolution</span>
+              </div>
+
+              <div class="metadata-item">
+                <div class="meta-item-header">
+                  <span class="meta-label">Height</span>
+                  <span class="meta-icon">↕️</span>
+                </div>
+                <span class="meta-value" id="metaHeight">--</span>
+                <span class="meta-sub">Pixel resolution</span>
+              </div>
+
+              <div class="metadata-item">
+                <div class="meta-item-header">
+                  <span class="meta-label">Channels</span>
+                  <span class="meta-icon">🎨</span>
+                </div>
+                <span class="meta-value" id="metaChannels">--</span>
+                <span class="meta-sub">Color depth (BGR)</span>
+              </div>
+
+              <div class="metadata-item">
+                <div class="meta-item-header">
+                  <span class="meta-label">Validated Size</span>
+                  <span class="meta-icon">💾</span>
+                </div>
+                <span class="meta-value" id="metaSize">--</span>
+                <span class="meta-sub">Stored binary size</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Section E: Model Performance Benchmarks (Precision, Recall, F1-Score) -->
+        <div class="dashboard-section">
+          <div class="section-header-row">
+            <div class="title-with-pill">
+              <h3 class="section-heading">Model Performance Benchmarks</h3>
+              <span class="sub-pill">RoadTwin Evaluation Dataset</span>
+            </div>
+            <span class="badge badge-pending">Pending Integration</span>
+          </div>
+          <p class="section-subtext">Quantitative validation metrics to be computed on the ground-truth test split once PyTorch model training is complete.</p>
+
+          <div class="benchmark-grid">
+            
+            <!-- Precision Card -->
+            <div class="benchmark-card">
+              <div class="benchmark-card-header">
+                <span class="benchmark-card-title">Precision</span>
+                <span class="badge badge-pending">Pending</span>
+              </div>
+              <div class="benchmark-card-body">
+                <span class="benchmark-value">--</span>
+                <span class="benchmark-formula">TP / (TP + FP)</span>
+              </div>
+              <p class="benchmark-desc">Accuracy of flagged road defects; minimizes false-positive hazard warnings.</p>
+            </div>
+
+            <!-- Recall Card -->
+            <div class="benchmark-card">
+              <div class="benchmark-card-header">
+                <span class="benchmark-card-title">Recall</span>
+                <span class="badge badge-pending">Pending</span>
+              </div>
+              <div class="benchmark-card-body">
+                <span class="benchmark-value">--</span>
+                <span class="benchmark-formula">TP / (TP + FN)</span>
+              </div>
+              <p class="benchmark-desc">Proportion of true road surface distress accurately detected by the model.</p>
+            </div>
+
+            <!-- F1-Score Card -->
+            <div class="benchmark-card">
+              <div class="benchmark-card-header">
+                <span class="benchmark-card-title">F1-Score</span>
+                <span class="badge badge-pending">Pending</span>
+              </div>
+              <div class="benchmark-card-body">
+                <span class="benchmark-value">--</span>
+                <span class="benchmark-formula">2 &bull; (P &bull; R) / (P + R)</span>
+              </div>
+              <p class="benchmark-desc">Harmonic mean balancing precision and recall across skewed pavement datasets.</p>
+            </div>
+
+          </div>
+
+          <div class="benchmark-note">
+            <span class="note-icon">📌</span>
+            <span class="note-text">Performance indicators will be calculated dynamically against the benchmark test split when model evaluation pipelines are activated.</span>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Application Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <p class="footer-title">RoadTwin-GAN &bull; College Engineering Capstone Project</p>
+        <p class="footer-subtitle">Digital Twin Road Surface Generation & Automated Distress Analysis</p>
+      </div>
+      <div class="tech-tags">
+        <span class="tag">HTML5 / CSS3 / Vanilla JS</span>
+        <span class="tag">Python Flask</span>
+        <span class="tag">OpenCV 4</span>
+        <span class="tag tag-highlight">PyTorch (Planned)</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
